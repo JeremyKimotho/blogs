@@ -1,0 +1,11 @@
+{% macro displayPosts(posts) %}
+{% for post in posts %}
+<div class="container">
+  <div class="col-xs-12 col-sm-4 col-md-12 col-lg-12">
+    <h1>{{post.title}}</h1>
+    <h3>{{post.body}}</h3>
+    <h6>View comments</h6>
+  </div>
+</div>
+{% endfor %}
+{% endmacro %}

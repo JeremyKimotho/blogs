@@ -13,12 +13,13 @@
       <div class='navbar-collapse collapse'>
         {% if current_user.is_authenticated %}
         <ul class='nav navbar-nav navbar-right'>
-          <li><a href="{{url_for('main.profile_user', uname=current_user.username, id=current_user.id)}}">{{current_user.username}}</a></li>
+          <li><a href="{{url_for('main.profile_user', uname=current_user.username, id=current_user.id)}}">{{current_user.username|upper}}</a></li>
           <li style='color:white;'><a href="{{url_for('auth.logout')}}">Log Out</a></li>
         </ul>
         {% endif %}
         {% if current_user.username == 'master' %}
         <ul class='nav navbar-nav navbar-right'>
+          <li><a href="{{url_for('main.write_post')}}">New Blog Post</a></li>
           <li><a href="{{url_for('main.profile_admin', uname=current_user.username, id=current_user.id)}}">Admin Settings</a></li>
         </ul>
         {% endif %}
