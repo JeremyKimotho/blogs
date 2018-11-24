@@ -50,6 +50,11 @@ ACCESS = {
   def allowed(self, access_level):
     return self.access >= access_level
 
+  def init_db():
+  if User.query.all().count() == 0:
+    master = User(username='master', password='master', first_name='Jeremy', surname='Kimotho', email='projectsjeremy1000@gmail.com', access=ACCESS['admin'])
+    save_user(master)
+
   def __repr__(self):
     return f'User {self.username}'
 
