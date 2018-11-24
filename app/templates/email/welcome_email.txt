@@ -1,3 +1,3 @@
-Hello {{user.first_name}}
-Welcome to Jitches
-We have just seen you have signed up for our application and want to welcome you to the family. Please enjoy the pitches various.
+Hello {{user.first_name|upper}}
+Welcome to Jeiter
+I have just seen you have signed up for my application and want to welcome you to the family. Please enjoy my blogs.
