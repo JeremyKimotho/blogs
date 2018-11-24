@@ -4,6 +4,11 @@ from flask_login import UserMixin
 from datetime import datetime
 from . import login_manager
 
+ACCESS = {
+  'user': 0,
+  'admin': 1
+}
+
 @login_manager.user_loader
 def load_user(user_id):
   return User.query.get(int(user_id))
@@ -11,14 +16,13 @@ def load_user(user_id):
 class User(UserMixin, db.Model):
   __tablename__='users'
 
-  id = db.Column(db.Integer, primary_key = True)
+  id = db.Column(db.Integer(), primary_key = True)
   username = db.Column(db.String(255))
   email = db.Column(db.String(255))
   first_name = db.Column(db.String(255))
   surname = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
-
-  roles = db.relationship('Role', secondary='user_roles'))
+  access=db.Column(db.String(255), default=ACCESS['user'])
 
   comments = db.relationship('Comments', backref='comments', lazy='dynamic')
 
@@ -37,15 +41,27 @@ class User(UserMixin, db.Model):
     db.session.add(self)
     db.session.commit()
 
+  def is_admin(self):
+    return self.access == ACCESS['admin']
+    
+  def allowed(self, access_level):
+    return self.access >= access_level
+
+  def creating_master():
+    if User.query.all().count() == 0:
+      master=User(username='master', email='projectsjeremy1000@gmail.com', first_name='Jeremy', surname='Kimotho', password='master', access=ACCESS['admin'])
+      db.session.add(master)
+      db.session.commit()
+
   def __repr__(self):
     return f'User {self.username}'
 
 class Comments(db.Model):
   __tablename__='comments'
 
-  id = db.Column(db.Integer, primary_key = True)
+  id = db.Column(db.Integer(), primary_key = True)
   comment = db.Column(db.String)
-  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+  user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
   posted = db.Column(db.DateTime,default=datetime.utcnow)
   post = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
@@ -61,9 +77,9 @@ class Comments(db.Model):
 class Post(db.Model):
   __tablename__='posts'
 
-  id = db.Column(db.Integer, primary_key = True)
+  id = db.Column(db.Integer(), primary_key = True)
   title = db.Column(db.String(255))
-  body = db.Column(db.String)
+  body = db.Column(db.String())
   posted = db.Column(db.DateTime,default=datetime.utcnow)
   
   comments = db.relationship('Comments', backref='comments1', lazy='dynamic')
@@ -81,22 +97,3 @@ class Post(db.Model):
     post = Post.query.filter_by(id = self.id).first()
     comments = Comments.query.filter_by(post=post.id)
     return comments
-
-class Role(db.Model):
-  __tablename__='roles'
-
-  id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String(255), unique=True)
-
-  def __repr__(self):
-    return f'User {self.name}'
-  
-class UserRoles(db.Model):
-  __tablename__ = 'user_roles'
-  id = db.Column(db.Integer(), primary_key=True)
-  user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
-  role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
-
-  admin_role = Role(name='Admin')
-  user_role = Role(name='User')
-  db.session.commit()
