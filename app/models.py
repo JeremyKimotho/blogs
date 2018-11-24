@@ -20,7 +20,7 @@ class User(UserMixin, db.Model):
   id = db.Column(db.Integer(), primary_key = True)
   username = db.Column(db.String(255))
   email = db.Column(db.String(255))
-  joined=db.Column(db.DateTime,default=datetime.utcnow)
+  joined=db.Column(db.DateTime,default=datetime.now)
   first_name = db.Column(db.String(255))
   surname = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
@@ -69,7 +69,7 @@ class Comments(db.Model):
   id = db.Column(db.Integer(), primary_key = True)
   comment = db.Column(db.String)
   user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
-  posted = db.Column(db.DateTime,default=datetime.utcnow)
+  posted = db.Column(db.DateTime,default=datetime.now)
   post = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
   def save_comment(self):

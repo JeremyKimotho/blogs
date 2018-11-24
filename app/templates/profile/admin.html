@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macro %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>Admin Info:</h2>
+      <h4>Total Subscribers: {{users|count}}</h4>
+      <h4>Total Posts: {{posts|count}}</h4>
+    </div>
+  </div>
+</div>
+{% endblock %}

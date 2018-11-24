@@ -3,14 +3,15 @@ import time
 from datetime import datetime
 
 def date_calc(date):
+  properDate=str(date)
   today = calendar.timegm(time.gmtime())
-  useDate = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+  useDate = datetime.strptime(properDate, '%Y-%m-%d %H:%M:%S.%f')
   calcDate = int(useDate.strftime('%s'))
   secondsPast = today - calcDate
   daysPast = secondsPast/86400
 
   if daysPast<=1:
-    return 'Only for today.'
+    return 'Only for today'
   elif daysPast>1 and daysPast<=2:
     return 'Just yesterday.'
   else :

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 from flask_login import login_user, logout_user, login_required
 from . import auth
 from ..models import User
@@ -15,9 +15,9 @@ def register():
   if form.validate_on_submit():
     user = User(email=form.email.data, username=form.username.data, password=form.password.data, first_name=form.fname.data, surname=form.lname.data)
 
-    save_user(user)
+    User.save_user(user)
 
-    mail_message('Welcome to Jlogs', 'email/welcome_email', user.email, user=user)
+    welcome_mail_message('Welcome to Jlogs', 'email/welcome_email', user.email, user=user)
     return redirect(url_for('auth.login'))
     title='New Jlogs Account'
 
