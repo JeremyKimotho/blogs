@@ -18,6 +18,8 @@ class User(UserMixin, db.Model):
   surname = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
 
+  roles = db.relationship('Role', secondary='user_roles'))
+
   comments = db.relationship('Comments', backref='comments', lazy='dynamic')
 
   @property
@@ -45,7 +47,7 @@ class Comments(db.Model):
   comment = db.Column(db.String)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   posted = db.Column(db.DateTime,default=datetime.utcnow)
-  post = db.Column(db.Integer, db.ForeignKey('post.id'))
+  post = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
   def save_comment(self):
     db.session.add(self)
@@ -80,5 +82,21 @@ class Post(db.Model):
     comments = Comments.query.filter_by(post=post.id)
     return comments
 
+class Role(db.Model):
+  __tablename__='roles'
+
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(255), unique=True)
+
+  def __repr__(self):
+    return f'User {self.name}'
   
-    
+class UserRoles(db.Model):
+  __tablename__ = 'user_roles'
+  id = db.Column(db.Integer(), primary_key=True)
+  user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+  role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
+
+  admin_role = Role(name='Admin')
+  user_role = Role(name='User')
+  db.session.commit()
