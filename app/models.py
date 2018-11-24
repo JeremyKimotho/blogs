@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
   id = db.Column(db.Integer(), primary_key = True)
   username = db.Column(db.String(255))
   email = db.Column(db.String(255))
+  joined=db.Column(db.DateTime,default=datetime.utcnow)
   first_name = db.Column(db.String(255))
   surname = db.Column(db.String(255))
   pass_secure = db.Column(db.String(255))
@@ -42,6 +43,10 @@ class User(UserMixin, db.Model):
     db.session.add(self)
     db.session.commit()
 
+  def find_by_username(cls, username):
+    user = User.query.filter_by(username=username).first()
+    return user
+
   def is_admin(self):
     return self.access == ACCESS['admin']
     
@@ -49,9 +54,11 @@ class User(UserMixin, db.Model):
     return self.access >= access_level
 
   def init_db():
-    if User.query.all().count() == 0:
+    if User.query.count() == 0:
       master = User(username='master', password='master', first_name='Jeremy', surname='Kimotho', email='projectsjeremy1000@gmail.com', access=ACCESS['admin'])
-      save_user(master)
+      
+      db.session.add(master)
+      db.session.commit()
 
   def __repr__(self):
     return f'User {self.username}'
