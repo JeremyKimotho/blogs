@@ -20,3 +20,14 @@ class RegistrationForm(FlaskForm):
   def validate_username(self, data_field):
     if User.query.filter_by(username = data_field.data).first():
       raise ValidationError('That username is taken')
+
+  def init_db():
+    if User.query.all().count() == 0:
+      master = User(username='master', password='master', first_name='Jeremy', surname='Kimotho', email='projectsjeremy1000@gmail.com', access=ACCESS['admin'])
+      save_user(master)
+
+class LoginForm(FlaskForm):
+  username = StringField('Your Username', validators=[Required()])
+  password = PasswordField('Password', validators=[Required()])
+  remember = BooleanField('Remember Me')
+  submit = SubmitField('Login')

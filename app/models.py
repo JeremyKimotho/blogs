@@ -4,16 +4,19 @@ from flask_login import UserMixin
 from datetime import datetime
 from . import login_manager
 
-ACCESS = {
-  'user': 0,
-  'admin': 1
-}
+
 
 @login_manager.user_loader
 def load_user(user_id):
   return User.query.get(int(user_id))
 
 class User(UserMixin, db.Model):
+
+ACCESS = {
+  'user': 0,
+  'admin': 1
+}
+
   __tablename__='users'
 
   id = db.Column(db.Integer(), primary_key = True)
@@ -46,12 +49,6 @@ class User(UserMixin, db.Model):
     
   def allowed(self, access_level):
     return self.access >= access_level
-
-  def creating_master():
-    if User.query.all().count() == 0:
-      master=User(username='master', email='projectsjeremy1000@gmail.com', first_name='Jeremy', surname='Kimotho', password='master', access=ACCESS['admin'])
-      db.session.add(master)
-      db.session.commit()
 
   def __repr__(self):
     return f'User {self.username}'
