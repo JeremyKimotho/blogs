@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macro %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Jeiter</title>
+  </head>
+  <body>
+    {{macro.displayPosts(posts)}}
+  </body>
+</html>
+{% endblock %}
