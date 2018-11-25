@@ -76,6 +76,11 @@ class Comments(db.Model):
     db.session.add(self)
     db.session.commit()
 
+  def delete_comments(self):
+    db.session.delete(self)
+    db.session.commit()
+
+
   @classmethod
   def get_comments(cls, id):
     comments = Comments.query.filter_by(posted=id).all()

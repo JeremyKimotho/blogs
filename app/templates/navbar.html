@@ -1,5 +1,5 @@
-<div class="nav-stylings">
-  <div class='navbar navbar-inverse' role='navigation'>
+<div style='background-color:#000080;border-radius: 0px;color:white;padding-left:16px;height:75px;margin-bottom:40px;' class="nav-stylings">
+  <div style='background-color:#000080;border-radius: 0px;color:white;padding-left:16px;border:#000080' class='navbar navbar-inverse' role='navigation'>
     <div class="container-fluid">
       <div class="navbar-header">
         <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
@@ -8,19 +8,19 @@
           <span class='icon-bar'></span>
           <span class='icon-bar'></span>
         </button>
-        <a class='navbar-brand' href='/'>Jeiter</a>
+        <a style='color:white;font-size:40px;padding-top:25px;' class='navbar-brand' href='/'>Jeiter</a>
       </div>
-      <div class='navbar-collapse collapse'>
+      <div style='color:white;' class='navbar-collapse collapse'>
         {% if current_user.is_authenticated %}
         <ul class='nav navbar-nav navbar-right'>
-          <li><a href="{{url_for('main.profile_user', uname=current_user.username, id=current_user.id)}}">{{current_user.username|upper}}</a></li>
-          <li style='color:white;'><a href="{{url_for('auth.logout')}}">Log Out</a></li>
+          <li><a style='color:white;font-size:20px;padding-top:25px;' href="{{url_for('main.profile_user', uname=current_user.username, id=current_user.id)}}">{{current_user.username|upper}}</a></li>
+          <li><a style='color:white;font-size:20px;padding-top:25px;' href="{{url_for('auth.logout')}}">Log Out</a></li>
         </ul>
         {% endif %}
         {% if current_user.username == 'master' %}
         <ul class='nav navbar-nav navbar-right'>
-          <li><a href="{{url_for('main.write_post')}}">New Blog Post</a></li>
-          <li><a href="{{url_for('main.profile_admin', uname=current_user.username, id=current_user.id)}}">Admin Settings</a></li>
+          <li><a style='color:white;font-size:20px;padding-top:25px;' href="{{url_for('main.write_post')}}">New Blog Post</a></li>
+          <li><a style='color:white;font-size:20px;padding-top:25px;' href="{{url_for('main.profile_admin', uname=current_user.username, id=current_user.id)}}">Admin Settings</a></li>
         </ul>
         {% endif %}
       </div>

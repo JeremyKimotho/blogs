@@ -78,7 +78,13 @@ def write_comments(id):
 
   return render_template('comment.html', comment=form, user=user, post=post)
 
-@main.route('/delete-post/<id>', methods=['GET', 'POST'])
+@main.route('/delete-comments/<id>', methods=['GET', 'POST'])
 def delete_comments(id):
   post = Post.query.filter_by(id=id).first()
-  return delete_
+  comment = Post.query.filter_by(post=id).first()
+  user = User.query.filter_by(id=id).first()
+  
+  if user.access>0:
+    return delete_comments(comment)
+  
+  return render_template('comment.html', comment=comments, post=post, user=user)
