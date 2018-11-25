@@ -26,7 +26,7 @@ class User(UserMixin, db.Model):
   pass_secure = db.Column(db.String(255))
   access=db.Column(db.String(255), default=ACCESS['user'])
 
-  comments = db.relationship('Comments', backref='comments', lazy='dynamic')
+  comments = db.relationship('Comments', backref='user', lazy='dynamic')
 
   @property
   def password(self):
@@ -89,7 +89,7 @@ class Post(db.Model):
   body = db.Column(db.String)
   posted = db.Column(db.DateTime,default=datetime.utcnow)
   
-  comments = db.relationship('Comments', backref='comments1', lazy='dynamic')
+  comments = db.relationship('Comments', backref='post_comments', lazy='dynamic')
 
   def save_post(self):
     db.session.add(self)

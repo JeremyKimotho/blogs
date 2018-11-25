@@ -59,18 +59,26 @@ def write_post():
 
 @main.route('/view_comments/<id>')
 def view_comments(id):
-  post = Post.query.filter_by(id=id)
-  comments = Comments.query.filter_by(post=id)
+  user = User.query.filter_by(id=id).first()
+  post = Post.query.filter_by(id=id).first()
+  comments = Post.get_comments(post)
 
-  return render_template('comments.html', comments=comments, post=post)
+  return render_template('comments.html', comments=comments, post=post, user=user)
 
-@main.route('/write-comment', methods=['GET', 'POST'])
-def write_comments():
+@main.route('/write-comment/<id>', methods=['GET', 'POST'])
+def write_comments(id):
   form=CommentForm()
+  post = Post.query.filter_by(id=id).first()
+  user = User.query.filter_by(id=id).first()
   if form.validate_on_submit():
-    comment = Comments(comment=form.comment.data)
+    comment = Comments(comment=form.comment.data, user=user, post_comments=post)
     comment.save_comment()
 
     return redirect(url_for('main.index'))
 
-  return render_template('comment.html', comment=form)
+  return render_template('comment.html', comment=form, user=user, post=post)
+
+@main.route('/delete-post/<id>', methods=['GET', 'POST'])
+def delete_comments(id):
+  post = Post.query.filter_by(id=id).first()
+  return delete_

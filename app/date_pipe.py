@@ -11,8 +11,8 @@ def date_calc(date):
   daysPast = secondsPast/86400
 
   if daysPast<=1:
-    return 'Only for today'
+    return 'Only for today, but more to come!'
   elif daysPast>1 and daysPast<=2:
-    return 'Just yesterday.'
+    return 'Since just yesterday'
   else :
     return str(int(daysPast)) + ' days'
