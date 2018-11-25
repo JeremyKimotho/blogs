@@ -4,8 +4,10 @@ from ..models import User, Post, Comments
 from ..date_pipe import date_calc
 from flask_login import login_required, current_user
 from .. import db
+from .forms import PostForm, CommentForm
 from datetime import datetime
 from functools import wraps
+from ..email import updates_mail_message
 
 def requires_admin(access_level):
   def decorator(f):
@@ -23,8 +25,9 @@ def requires_admin(access_level):
 @main.route('/')
 @login_required
 def index():
+  posts=Post.query.all()
   title='Welcome to Jeiter'
-  return render_template('index.html', title=title)
+  return render_template('index.html', title=title, posts=posts)
 
 @main.route('/profile/user/<uname>/<id>')
 def profile_user(id, uname):
@@ -41,6 +44,7 @@ def profile_admin(id, uname):
 @main.route('/writing-posts', methods=['GET', 'POST'])
 @login_required
 def write_post():
+  users=User.query.all()
   form = PostForm()
   if form.validate_on_submit():
     post = Post(title=form.title.data, body=form.body.data)
@@ -48,5 +52,25 @@ def write_post():
     Post.save_post(post)
     return redirect(url_for('main.index'))
 
+    update_mail_message('Update from Jeiter', 'email/update_email', users.email)
+
   title='New Blog Post'
   return render_template('new_post.html', post=form, title=title)
+
+@main.route('/view_comments/<id>')
+def view_comments(id):
+  post = Post.query.filter_by(id=id)
+  comments = Comments.query.filter_by(post=id)
+
+  return render_template('comments.html', comments=comments, post=post)
+
+@main.route('/write-comment', methods=['GET', 'POST'])
+def write_comments():
+  form=CommentForm()
+  if form.validate_on_submit():
+    comment = Comments(comment=form.comment.data)
+    comment.save_comment()
+
+    return redirect(url_for('main.index'))
+
+  return render_template('comment.html', comment=form)

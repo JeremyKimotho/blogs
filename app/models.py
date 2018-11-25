@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
 
   __tablename__='users'
 
-  id = db.Column(db.Integer(), primary_key = True)
+  id = db.Column(db.Integer, primary_key = True)
   username = db.Column(db.String(255))
   email = db.Column(db.String(255))
   joined=db.Column(db.DateTime,default=datetime.now)
@@ -66,9 +66,9 @@ class User(UserMixin, db.Model):
 class Comments(db.Model):
   __tablename__='comments'
 
-  id = db.Column(db.Integer(), primary_key = True)
+  id = db.Column(db.Integer, primary_key = True)
   comment = db.Column(db.String)
-  user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   posted = db.Column(db.DateTime,default=datetime.now)
   post = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
@@ -78,15 +78,15 @@ class Comments(db.Model):
 
   @classmethod
   def get_comments(cls, id):
-    comments = Comments.query.filter_by(post_id=id).all()
+    comments = Comments.query.filter_by(posted=id).all()
     return comments
 
 class Post(db.Model):
   __tablename__='posts'
 
-  id = db.Column(db.Integer(), primary_key = True)
+  id = db.Column(db.Integer, primary_key = True)
   title = db.Column(db.String(255))
-  body = db.Column(db.String())
+  body = db.Column(db.String)
   posted = db.Column(db.DateTime,default=datetime.utcnow)
   
   comments = db.relationship('Comments', backref='comments1', lazy='dynamic')
@@ -95,8 +95,16 @@ class Post(db.Model):
     db.session.add(self)
     db.session.commit()
 
+  def delete_post(self):
+    db.session.delete(self)
+    db.session.commit()
+
+  def get_specific_post(id):
+    post = Post.query.filter_by(id=id).first()
+    return post
+
   @classmethod
-  def get_posts(cls, id):
+  def get_posts(cls):
     posts = Post.query.all()
     return posts
 
