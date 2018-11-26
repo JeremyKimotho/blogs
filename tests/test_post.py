@@ -8,6 +8,9 @@ class PostTest(unittest.TestCase):
     
     self.new_post = Post(1, 'title', 'body', datetime.now())
 
+  def tearDown(self):
+    Post.query.delete()
+
   def test_instance(self):
     self.assertTrue(isinstance(self.new_post, Post))
 
