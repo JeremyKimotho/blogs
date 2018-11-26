@@ -11,6 +11,8 @@ This is an application where a user may read, and comment on my blogs. A user wo
 ## Technologies Used
 * Python
 * Flask
+## Live Link
+https://jeiter.herokuapp.com/
 ## Support and contact details
 Feel free to contact me on jeremykimotho@yahoo.com for any thoughts, suggestions, or feedback.
 
