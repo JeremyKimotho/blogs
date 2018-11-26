@@ -1,6 +1,7 @@
 from flask_mail import Message
 from flask import render_template
 from . import mail
+from .models import User
 
 sender_email = 'projectsjeremy1000@gmail.com'
 subject_pref_welcome = 'Welcome to Jeiter!'
